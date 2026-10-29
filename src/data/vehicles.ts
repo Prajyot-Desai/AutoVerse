@@ -20,6 +20,7 @@ export const VEHICLES: Vehicle[] = [
       powertrain: '2.9L Twin-Turbocharged Tipo F120A V8',
       drivetrain: '5-Speed Gated Manual RWD',
       weight: '1,254 kg',
+      fuelEconomy: '18.5 L/100 km (~650 km range)',
     },
     paintOptions: [
       {
@@ -161,6 +162,7 @@ export const VEHICLES: Vehicle[] = [
       powertrain: '4.0L Naturally Aspirated Boxer 6',
       drivetrain: '6-Speed GT Sports Manual RWD',
       weight: '1,420 kg',
+      fuelEconomy: '10.9 L/100 km (~585 km range)',
     },
     paintOptions: [
       {
@@ -320,6 +322,7 @@ export const VEHICLES: Vehicle[] = [
       powertrain: '1.5L Turbo 3-Cylinder + eDrive Electric Motor',
       drivetrain: 'Hybrid All-Wheel Drive (e-AWD)',
       weight: '1,535 kg',
+      fuelEconomy: '2.1 L/100 km / 55 km EV (~600 km total range)',
     },
     paintOptions: [
       {

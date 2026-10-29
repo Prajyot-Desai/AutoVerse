@@ -61,6 +61,7 @@ export const ComparisonModal: React.FC = () => {
     { label: 'Powertrain', valA: carA.specs.powertrain, valB: carB.specs.powertrain },
     { label: 'Drivetrain', valA: carA.specs.drivetrain, valB: carB.specs.drivetrain },
     { label: 'Curb Weight', valA: carA.specs.weight, valB: carB.specs.weight },
+    { label: 'Economy & Range', valA: carA.specs.fuelEconomy, valB: carB.specs.fuelEconomy },
   ];
 
   return (

@@ -330,6 +330,12 @@ export const ConfiguratorPanel: React.FC = () => {
                 <span className="text-neutral-400">Curb Weight</span>
                 <span className="text-white font-medium">{vehicle.specs.weight}</span>
               </div>
+              <div className="p-3 rounded-lg border border-white/[0.06] bg-black/30 flex justify-between items-center">
+                <span className="text-neutral-400">Economy & Range</span>
+                <span className="text-white font-medium truncate max-w-[170px] text-right" title={vehicle.specs.fuelEconomy}>
+                  {vehicle.specs.fuelEconomy}
+                </span>
+              </div>
             </div>
           </div>
         )}

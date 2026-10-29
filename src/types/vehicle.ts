@@ -44,6 +44,7 @@ export interface VehicleSpecs {
   powertrain: string;   // e.g. "4.5L Naturally Aspirated V8"
   drivetrain: string;   // e.g. "RWD / 7-Speed Dual-Clutch"
   weight: string;       // e.g. "1,380 kg"
+  fuelEconomy: string;  // e.g. "10.9 L/100 km (~585 km range)"
 }
 
 export interface MeshBindings {

@@ -66,7 +66,7 @@ export const ViewerPlaceholder: React.FC = () => {
       <CarErrorBoundary>
         <Canvas
           shadows={false}
-          dpr={[1, 1.5]}
+          dpr={[1, 1]}
           camera={{ position: [activeBayX + 4.8, 1.8, 4.8], fov: 42, near: 0.1, far: 120 }}
           gl={{
             antialias: true,
@@ -75,8 +75,8 @@ export const ViewerPlaceholder: React.FC = () => {
           }}
           className="w-full h-full cursor-grab active:cursor-grabbing"
         >
-          <color attach="background" args={['#07080c']} />
-          <fog attach="fog" args={['#07080c', 16, 42]} />
+          <color attach="background" args={['#101218']} />
+          <fog attach="fog" args={['#101218', 35, 75]} />
 
           {/* Showroom Architectural Pavilion Environment (Ceiling hidden only in Top view) */}
           <ShowroomEnvironment

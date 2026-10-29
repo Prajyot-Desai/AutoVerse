@@ -11,6 +11,7 @@ interface ConfiguratorStore {
   cameraPreset: CameraViewPreset;
   isRotating: boolean;
   isWireframe: boolean;
+  isExploring: boolean;
   environmentPreset: 'studio' | 'night' | 'sunset' | 'neutral';
   comparisonVehicleId: string | null;
   isComparisonOpen: boolean;
@@ -25,6 +26,8 @@ interface ConfiguratorStore {
   setCaliper: (caliper: CaliperOption) => void;
   setActiveTab: (tab: ConfiguratorTab) => void;
   setCameraPreset: (preset: CameraViewPreset) => void;
+  setIsExploring: (isExploring: boolean) => void;
+  toggleExploring: () => void;
   toggleRotate: () => void;
   toggleHeadlights: () => void;
   toggleDoors: () => void;
@@ -67,6 +70,7 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
   cameraPreset: 'three-quarter',
   isRotating: false,
   isWireframe: false,
+  isExploring: false,
   environmentPreset: 'studio',
   comparisonVehicleId: null,
   isComparisonOpen: false,
@@ -184,6 +188,7 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
     const curr = configurations[activeVehicleId];
     set({
       cameraPreset: preset,
+      isExploring: false,
       configurations: {
         ...configurations,
         [activeVehicleId]: {
@@ -193,6 +198,10 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
       },
     });
   },
+
+  setIsExploring: (isExploring: boolean) => set({ isExploring }),
+
+  toggleExploring: () => set((s) => ({ isExploring: !s.isExploring })),
 
   toggleRotate: () => set((s) => ({ isRotating: !s.isRotating })),
 

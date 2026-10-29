@@ -31,3 +31,14 @@ This project utilizes 3D vehicle assets under Creative Commons licenses. The req
   > **Important**: This model is licensed under CC-BY-NC-4.0. It is permitted strictly for non-commercial educational, portfolio, and research evaluation. Commercial use is prohibited by the license author.
 - **Attribution Statement**:
   > This work is based on "BMW I8" (https://sketchfab.com/3d-models/bmw-i8-4b143b95aec045bf8912d99662f8d580) by iSteven (https://sketchfab.com/OneSteven) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+
+## Screenshots
+
+### 3D Showroom
+![AutoVerse 3D Showroom](screenshots/showroom.png)
+
+### Explore Mode
+![AutoVerse Explore Mode](screenshots/explore-mode.png)
+
+### Configuration and Specifications
+![AutoVerse Configuration](screenshots/configuration.png)

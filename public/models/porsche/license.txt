@@ -1,0 +1,11 @@
+Model Information:
+* title:	Porche 718 Cayman GT4 (Unrigged)
+* source:	https://sketchfab.com/3d-models/porche-718-cayman-gt4-unrigged-7fed4bf5dedb4cc9bdef5f487a455abe
+* author:	TorresVisuals (https://sketchfab.com/TorresVisuals)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Porche 718 Cayman GT4 (Unrigged)" (https://sketchfab.com/3d-models/porche-718-cayman-gt4-unrigged-7fed4bf5dedb4cc9bdef5f487a455abe) by TorresVisuals (https://sketchfab.com/TorresVisuals) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

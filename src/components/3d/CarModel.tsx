@@ -54,6 +54,8 @@ export const CarModel: React.FC<CarModelProps> = ({
     // Dedicated material instances for Porsche 718 decomposition
     let porscheSeatMaterial: THREE.Material | null = null;
     let porscheSeatbeltMaterial: THREE.Material | null = null;
+    let porscheCaliperMaterial: THREE.Material | null = null;
+    let porscheStitchingMaterial: THREE.Material | null = null;
 
     // Deferred mesh additions (e.g. split seat meshes) added after traversal
     const deferredAdditions: { parent: THREE.Object3D; mesh: THREE.Mesh }[] = [];
@@ -197,7 +199,7 @@ export const CarModel: React.FC<CarModelProps> = ({
           }
 
           // Special handling for Porsche 718:
-          // Isolate seat leather and seatbelt/stitching materials from the steering wheel
+          // Isolate seat leather, seatbelts, calipers, and interior stitching
           if (vehicle.id === 'porsche-718') {
             const mat = Array.isArray(mesh.material) ? mesh.material[0] : mesh.material;
             if (mat) {
@@ -223,6 +225,32 @@ export const CarModel: React.FC<CarModelProps> = ({
                 }
                 mesh.material = porscheSeatbeltMaterial;
                 return;
+              }
+
+              // Decouple brake calipers from interior stitching ribbons/accents
+              if (mat.name === 'vehicle_generic_smallspecmap__PAINT_2_.001') {
+                const isCaliper =
+                  mesh.name === 'Object_88' ||
+                  mesh.name === 'Object_103' ||
+                  mesh.name === 'Object_161' ||
+                  mesh.name === 'Object_174' ||
+                  Boolean(mesh.parent?.name.includes('hub_'));
+
+                if (isCaliper) {
+                  if (!porscheCaliperMaterial) {
+                    porscheCaliperMaterial = mat.clone();
+                    porscheCaliperMaterial.name = 'Porsche_Brake_Caliper';
+                  }
+                  mesh.material = porscheCaliperMaterial;
+                  return;
+                } else {
+                  if (!porscheStitchingMaterial) {
+                    porscheStitchingMaterial = mat.clone();
+                    porscheStitchingMaterial.name = 'Porsche_Interior_Stitching';
+                  }
+                  mesh.material = porscheStitchingMaterial;
+                  return;
+                }
               }
             }
           }
@@ -337,9 +365,18 @@ export const CarModel: React.FC<CarModelProps> = ({
           }
 
           // 3. Brake calipers
-          if (caliperMatNames.includes(mat.name)) {
+          if (
+            caliperMatNames.includes(mat.name) ||
+            mat.name === 'Porsche_Brake_Caliper'
+          ) {
             if ('color' in mat && mat.color instanceof THREE.Color) {
               mat.color.copy(caliperColor);
+            }
+            if ('roughness' in mat && typeof mat.roughness === 'number') {
+              mat.roughness = 0.22;
+            }
+            if ('metalness' in mat && typeof mat.metalness === 'number') {
+              mat.metalness = 0.25;
             }
             mat.needsUpdate = true;
           }
@@ -365,12 +402,19 @@ export const CarModel: React.FC<CarModelProps> = ({
           // 5. Interior stitching, seatbelts & door pull straps
           if (
             stitchingMatNames.includes(mat.name) ||
+            mat.name === 'Porsche_Interior_Stitching' ||
             mat.name === 'Porsche_Seatbelt_Stitching' ||
             (vehicle.id === 'porsche-718' && mat.name === 'ceinture_s.001') ||
             (vehicle.id === 'ferrari-f40' && mat.name === 'FFerrari_F40RewardRecycled_1987Coloured_Material1')
           ) {
             if ('color' in mat && mat.color instanceof THREE.Color) {
               mat.color.copy(interiorAccentColor);
+            }
+            if ('roughness' in mat && typeof mat.roughness === 'number') {
+              mat.roughness = 0.55;
+            }
+            if ('metalness' in mat && typeof mat.metalness === 'number') {
+              mat.metalness = 0.15;
             }
             mat.needsUpdate = true;
           }

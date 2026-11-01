@@ -29,6 +29,7 @@ export const ViewerPlaceholder: React.FC = () => {
     isExploring,
     setIsExploring,
     toggleExploring,
+    setActiveVehicle,
   } = useConfiguratorStore();
 
   const vehicle = getActiveVehicle();
@@ -75,8 +76,8 @@ export const ViewerPlaceholder: React.FC = () => {
           }}
           className="w-full h-full cursor-grab active:cursor-grabbing"
         >
-          <color attach="background" args={['#101218']} />
-          <fog attach="fog" args={['#101218', 35, 75]} />
+          <color attach="background" args={['#c0b5a8']} />
+          <fog attach="fog" args={['#c0b5a8', 38, 80]} />
 
           {/* Showroom Architectural Pavilion Environment (Ceiling hidden only in Top view) */}
           <ShowroomEnvironment
@@ -124,17 +125,17 @@ export const ViewerPlaceholder: React.FC = () => {
       {/* Top Overlay: Vehicle Identity */}
       <div className="absolute top-6 left-6 z-10 pointer-events-none">
         <div className="flex items-center space-x-2">
-          <span className="text-xs font-mono uppercase tracking-widest text-neutral-400">
+          <span className="text-xs font-mono uppercase tracking-widest text-[#55504A] font-semibold">
             {vehicle.brand} / {vehicle.year}
           </span>
-          <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-white/[0.06] border border-white/[0.08] text-neutral-300">
+          <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-black/[0.05] border border-black/[0.12] text-[#55504A] font-medium">
             {vehicle.category}
           </span>
         </div>
-        <h1 className="text-3xl font-light tracking-tight text-white mt-1 drop-shadow-sm">
+        <h1 className="text-3xl font-semibold tracking-tight text-[#252525] mt-1">
           {vehicle.name}
         </h1>
-        <p className="text-xs text-neutral-400 font-mono mt-0.5">
+        <p className="text-xs text-[#746C62] font-mono font-medium mt-0.5">
           {vehicle.edition}
         </p>
       </div>
@@ -218,12 +219,21 @@ export const ViewerPlaceholder: React.FC = () => {
           {/* Interactive Vehicle Prompt & Exploration Guide */}
           <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 pointer-events-none flex flex-col items-center space-y-2">
             {nearVehicle && (
-              <div className="px-3 py-1.5 rounded-lg bg-[#101217]/95 border border-sky-400/40 backdrop-blur-md text-xs font-mono text-white shadow-2xl flex items-center space-x-2 animate-in fade-in duration-150 pointer-events-auto">
+              <button
+                onClick={() => {
+                  setActiveVehicle(nearVehicle.id);
+                  if (document.pointerLockElement) {
+                    document.exitPointerLock?.();
+                  }
+                }}
+                className="px-3 py-1.5 rounded-lg bg-[#101217]/95 border border-sky-400/40 backdrop-blur-md text-xs font-mono text-white shadow-2xl flex items-center space-x-2 animate-in fade-in duration-150 pointer-events-auto hover:bg-sky-500/20 hover:border-sky-400 transition-all cursor-pointer"
+                title={`Configure ${nearVehicle.brand} ${nearVehicle.name} (Press E)`}
+              >
                 <span className="px-1.5 py-0.5 rounded bg-sky-500/20 border border-sky-400/40 text-sky-300 font-semibold text-[10px]">
                   E
                 </span>
                 <span>Configure {nearVehicle.brand} {nearVehicle.name}</span>
-              </div>
+              </button>
             )}
             <div className="px-3.5 py-1.5 rounded-lg bg-[#101217]/90 border border-white/[0.08] backdrop-blur-md text-[11px] font-mono text-neutral-300 shadow-xl flex items-center space-x-3">
               <span className="text-neutral-400">WASD / Arrows to Walk</span>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { useThree, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useConfiguratorStore } from '../../stores/useConfiguratorStore';
@@ -28,9 +28,9 @@ const WALL_BOUNDS = {
 // Porsche 718 Cayman GT4: width 2.00m, length 4.45m -> hx = 1.05, hz = 2.26
 // BMW i8: width 2.16m, length 4.69m -> hx = 1.12, hz = 2.38
 const VEHICLE_OBSTACLES = [
-  { id: 'ferrari-f40', cx: -7.5, cz: 0, hx: 1.04, hz: 2.24, defaultRotY: Math.PI },
+  { id: 'ferrari-f40', cx: -7.5, cz: 0, hx: 1.04, hz: 2.24, defaultRotY: 0 },
   { id: 'porsche-718', cx: 0, cz: 0, hx: 1.05, hz: 2.26, defaultRotY: 0 },
-  { id: 'bmw-i8', cx: 7.5, cz: 0, hx: 1.12, hz: 2.38, defaultRotY: Math.PI },
+  { id: 'bmw-i8', cx: 7.5, cz: 0, hx: 1.12, hz: 2.38, defaultRotY: 0 },
 ];
 
 const PLATFORM_CENTERS = [
@@ -139,7 +139,54 @@ export const FirstPersonExplorer: React.FC<FirstPersonExplorerProps> = ({
     { id: 'bmw-i8', bayX: 7.5, turntableGroup: null, baseRotGroup: null },
   ]);
 
-  // Initialize camera position and orientation once on mount
+  // Track previous activeBayX to react to external vehicle switcher changes (e.g. Header)
+  const lastActiveBayX = useRef<number>(activeBayX);
+
+  // Dedicated vehicle interaction handler for Explore Mode
+  const handleConfigureVehicle = useCallback(
+    (targetVehicleId: string) => {
+      const targetPlat = PLATFORM_CENTERS.find((p) => p.id === targetVehicleId);
+      const bayX = targetPlat ? targetPlat.x : activeBayX;
+
+      lastActiveBayX.current = bayX;
+
+      // 1. Synchronize the active vehicle in the configurator store
+      setActiveVehicle(targetVehicleId);
+
+      // 2. Position and frame the camera directly facing the vehicle
+      pos.current.set(bayX, 1.65, 4.8);
+      yaw.current = 0;
+      pitch.current = -0.08;
+      camera.rotation.order = 'YXZ';
+      camera.rotation.set(pitch.current, yaw.current, 0, 'YXZ');
+      camera.position.copy(pos.current);
+
+      // 3. Exit pointer lock so mouse is available to interact with configuration options
+      if (document.pointerLockElement) {
+        document.exitPointerLock?.();
+      }
+      isPointerLocked.current = false;
+    },
+    [activeBayX, camera, setActiveVehicle]
+  );
+
+  const handleConfigureVehicleRef = useRef(handleConfigureVehicle);
+  handleConfigureVehicleRef.current = handleConfigureVehicle;
+
+  // React to external vehicle switcher changes (e.g. clicking a car tab in Header)
+  useEffect(() => {
+    if (activeBayX !== lastActiveBayX.current) {
+      lastActiveBayX.current = activeBayX;
+      pos.current.set(activeBayX, 1.65, 4.8);
+      yaw.current = 0;
+      pitch.current = -0.08;
+      camera.rotation.order = 'YXZ';
+      camera.rotation.set(pitch.current, yaw.current, 0, 'YXZ');
+      camera.position.copy(pos.current);
+    }
+  }, [activeBayX, camera]);
+
+  // Initialize camera position, orientation, and input handlers once on mount
   useEffect(() => {
     pos.current.set(activeBayX, 1.65, 4.8);
     yaw.current = 0;
@@ -159,7 +206,7 @@ export const FirstPersonExplorer: React.FC<FirstPersonExplorerProps> = ({
 
       // [E] key: configure nearby vehicle
       if (e.code === 'KeyE' && nearVehicleRef.current) {
-        setActiveVehicle(nearVehicleRef.current);
+        handleConfigureVehicleRef.current(nearVehicleRef.current);
       }
 
       // [Escape] key: exit explore mode
@@ -236,7 +283,7 @@ export const FirstPersonExplorer: React.FC<FirstPersonExplorerProps> = ({
         document.exitPointerLock?.();
       }
     };
-  }, [activeBayX, camera, gl, setActiveVehicle, setIsExploring]);
+  }, [camera, gl, setIsExploring]);
 
   // Movement & physics loop runs smoothly per animation frame
   useFrame((_, delta) => {

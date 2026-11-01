@@ -11,7 +11,7 @@ export const VEHICLES: Vehicle[] = [
     basePrice: 1750000,
     modelPath: '/models/ferrari/scene.gltf',
     targetLength: 4.38,
-    rotationY: Math.PI, // Aligns front towards perspective camera
+    rotationY: 0, // Aligned with Porsche (+Z forward)
     manualYOffset: 0.0,
     specs: {
       acceleration: '3.9s (0-100 km/h)',
@@ -295,12 +295,11 @@ export const VEHICLES: Vehicle[] = [
     ],
     meshBindings: {
       bodyMaterials: ['Gray_Vehicle_Paint'],
-      secondaryBodyMaterials: ['vehicle_generic_smallspecmap__PAINT_2_.001'],
       wheelMaterials: ['Tyre_Rim_Texture'],
-      caliperMaterials: ['vehicle_generic_smallspecmap__PAINT_2_.001'],
+      caliperMaterials: ['Porsche_Brake_Caliper'],
       interiorMaterials: ['Dark_Main_Interior_Base_Color', 'Interior_Diffuse'],
       seatMaterials: ['Porsche_Seat_Leather'],
-      stitchingMaterials: ['Porsche_Seatbelt_Stitching', 'ceinture_s.001'],
+      stitchingMaterials: ['Porsche_Interior_Stitching', 'Porsche_Seatbelt_Stitching', 'ceinture_s.001'],
     },
   },
   {
@@ -313,7 +312,7 @@ export const VEHICLES: Vehicle[] = [
     basePrice: 147500,
     modelPath: '/models/bmw/scene.gltf',
     targetLength: 4.69,
-    rotationY: Math.PI,
+    rotationY: 0,
     manualYOffset: 0.0,
     specs: {
       acceleration: '4.4s (0-100 km/h)',
